@@ -1,0 +1,11 @@
+{
+    "authors":[ "Daranix", "Myami" ],
+    "jcmp_dependencies": [
+        "chat",
+        "command-manager",
+		"jc3mp-minimap"
+    ],
+    "license":"MIT",
+    "name":"battleroyale",
+    "version":"1.0.0"
+}
