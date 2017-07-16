@@ -72,7 +72,7 @@ module.exports = class Utility {
   }
 
   static randomColor() {
-    return "#"+((1<<24)*Math.random()|0).toString(16);
+    return require('./utils/randomColor.js')();
   }
 
   static RGBToHex(rgb) {
@@ -176,16 +176,16 @@ module.exports = class Utility {
   static randomSpawn(baseVec, radius) {
     const half = radius / 2;
     var posx = baseVec.x + battleroyale.utils.random(-half, half);
-    var posy = baseVec.y
+    var posy = baseVec.y;
     var posz = baseVec.z + battleroyale.utils.random(-half, half);
 
     return new Vector3f(posx, posy, posz);
   }
 
-  static randomSpawn(baseVec, radius) {
+  /*static randomSpawn(baseVec, radius) {
     const half = radius / 2;
     return new Vector3f(baseVec.x + battleroyale.utils.random(-half, half), baseVec.y, baseVec.z + battleroyale.utils.random(-half, half));
-  }
+  }*/
 
   static broadcastToLobby(msg) {
     for (let player of battleroyale.game.players.onlobby) {
@@ -211,12 +211,18 @@ module.exports = class Utility {
     array.splice(index, 1);
   }*/
 
-  static IsPointInCircle(v1, v2, radius) { // FIXME: Take a look to this 
+  static IsPointInCircle(v1, v2, radius) {
     //console.log(battleroyale.utils.GetDistanceBetweenPointsXY(v1, v2));
-    if (battleroyale.utils.GetDistanceBetweenPointsXY(v1, v2) <= radius) return true;
-    return false;
-    /*var distsq = (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y);
-    return distsq <= radius * radius;*/
+    /*if (battleroyale.utils.GetDistanceBetweenPointsXZ(v1, v2) <= radius) return true;
+    return false;*/
+    var comparation = (battleroyale.utils.GetDistanceBetweenPointsXZ(v1,v2) <= radius);
+    return comparation;
+  }
+
+  static IsPointInCircleRender(v1, v2, radius) {
+
+    var comparation = (battleroyale.utils.GetDistanceBetweenPointsXZ(v1,v2) <= radius * 0.95/2);
+    return comparation;
   }
 
   static GetDistanceBetweenPoints(v1, v2) {
@@ -227,25 +233,27 @@ module.exports = class Utility {
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
-  static GetDistanceBetweenPointsXY(v1, v2) {
-    let v13f = new Vector3f(v1.x, v1.y, 0.0);
-    let v14f = new Vector3f(v2.x, v2.y, 0.0);
+  static GetDistanceBetweenPointsXZ(v1,v2) {
+    let v13f = new Vector3f(v1.x, 0.0, v1.z);
+    let v14f = new Vector3f(v2.x, 0.0, v2.z);
     return battleroyale.utils.GetDistanceBetweenPoints(v13f, v14f);
-
   }
 
   static isAdmin(player) {
+    /*
     if(battleroyale.config.admins.indexOf(player.client.steamId) >= 0) {
       return true;
     }
-    return false;
+    return false;*/
+
+    return jcmp.events.Call('adminsys_isAdmin', player)[0];
   }
 
   static showLobbyUI(player) {
     if(!player.ingame) {
       if(battleroyale.game.toStart) {
         jcmp.events.CallRemote('battleroyale_txt_updateTime', player, battleroyale.game.timeToStart)
-        jcmp.events.CallRemote('battleroyale_txt_timeleft_toggle', player, true);
+        jcmp.events.CallRemote('battleroyale_txt_timerStart', player, true);
       } else {
         jcmp.events.CallRemote('battleroyale_txt_leftplayers_toggle', player, true);
       }

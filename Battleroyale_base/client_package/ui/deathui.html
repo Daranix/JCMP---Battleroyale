@@ -43,7 +43,7 @@
 
         <img src="./img/deathimg.png" width="30%" height="45%"/>
 
-        <h1>You die</h1>
+        <h1>You are dead</h1>
         <h2>Killed by <span id="killerName">ExampleName</span></h2>
         <h3>Don't worry you will respawn in the lobby on <span id="respawnTime">5</span> seconds ..</h4>
     </div>
@@ -65,6 +65,8 @@
         }
         
         jcmp.AddEvent('battleroyale_deathui_show', function(killerName) {
+
+            // TODO: Reproduce sound as myami requested
 
             document.getElementById("respawnTime").innerText = "5";
             document.getElementById("killerName").innerText = killerName;

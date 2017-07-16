@@ -1,5 +1,5 @@
 {
-    "author": "Daranix",
+    "authors": "Daranix",
     "jcmp_dependencies": ["battleroyale"],
     "license":"MIT",
     "name": "battleroyale_nametags",

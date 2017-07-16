@@ -3,7 +3,9 @@ module.exports = [
     // Vulcan arena
     { 
         name: "Vulcan", 
-        position: new Vector3f(-12475, 2757, -12193),
+        position: new Vector3f(-12475, 1000, -12193),
+        maxY: 3000,
+        radius_start: 8000,
         itemSpawns: [
             {"x": -12487.2119140625, "y": 1756.4676513671875, "z": -12203.115234375,"id":3},
             {"x": -12412.81640625, "y": 1778.2391357421875, "z": -12192.197265625,"id":4},
@@ -39,7 +41,9 @@ module.exports = [
     // City arena
     {
         name: "City",
-        position: new Vector3f(3520, 2045, 1110),
+        position: new Vector3f(3475, 1045, 1064),
+        maxY: 3000,
+        radius_start: 2000,
         itemSpawns: [
             {"x":3695.89404296875, "y":1025.353515625, "z":1423.1143798828125,"id":3},
             {"x":3731.369873046875, "y":1029.2215576171875, "z":1314.610595703125,"id":4},

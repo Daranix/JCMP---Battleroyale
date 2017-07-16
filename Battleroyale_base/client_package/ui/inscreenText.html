@@ -26,9 +26,9 @@
         }
 
         #timerStart_container {
-            position: absolute;
+            /*position: absolute;
             bottom: calc(16px + 15% + 105px);
-            right: 5px;
+            right: 5px;*/
             text-align: center;
             font-size: 24pt;
         }
@@ -47,6 +47,17 @@
             -webkit-text-fill-color: red;
         }
 
+        #playersGameLeft_container {
+            position: absolute;
+            text-align: center;
+            font-size: 24pt;
+            margin-left: auto;
+            margin-right: auto;
+            left: 0;
+            right: 0;
+            bottom: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -57,6 +68,10 @@
 
     <div id="timerStart_container" class="textBase hidden">
         <p class="timeText">TIME LEFT TO START <br>THE NEXT BATTLE <br><span id="timeMinutes" class="textImportant">02</span>:<span id="timeSeconds" class="textImportant">00</span></p>
+    </div>
+
+    <div id="playersGameLeft_container" class="textBase hidden">
+        <p><span id="npleft" class="textImportant">0</span> PLAYERS LEFT OF <span id="npstart" class="textImportant">0</span></p>
     </div>
     <!--
     <script src="debug_cef_jcmp_eventEmulator.js"></script>
@@ -78,6 +93,20 @@
             }
         }
 
+        jcmp.AddEvent("battleroyale_txt_gameleftplayers_setnpstart", function(nstart) {
+            document.getElementById("npstart").innerText = nstart;
+        });
+
+        jcmp.AddEvent("battleroyale_txt_gameleftplayers_show", function(nleft) {
+            var element = document.getElementById("playersGameLeft_container");
+            document.getElementById("npleft").innerText = nleft;
+
+            element.classList.remove("hidden")
+            setTimeout(function() {
+                element.classList.add("hidden");
+            }, 5000)
+        });
+
         jcmp.AddEvent('battleroyale_txt_leftplayers_toggle', function(status) {
             toggleContainer("playersLeft_container", status);
         });
@@ -89,9 +118,11 @@
         jcmp.AddEvent('battleroyale_txt_timerStart', function(start) {
             if(start) { // START INTERVAL
                 toggleContainer("timerStart_container", true);
+                console.log("Timer started");
                 timerStart = setInterval(UpdateTimer, 1000);
             } else { // STOP INTERVAL
                 toggleContainer("timerStart_container", false);
+                console.log("Timer end")
                 clearInterval(timerStart);
                 // RESET TIMER
                 document.getElementById("timeMinutes").innerText = "02";

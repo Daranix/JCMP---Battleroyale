@@ -28,8 +28,41 @@ module.exports = ({ Command, manager }) => {
     console.log(player);
   }))
 
-  .add(new Command('distancetogame').description('Shows the distance to the game').handler(function(player) {
-    battleroyale.chat.send(player, battleroyale.utils.GetDistanceBetweenPointsXY(player.position, player.battleroyale.game.position))
+  
+  .add(new Command('showgameinfo').description('Shows game object to the console').handler(function(player) {
+    console.log(player.battleroyale.game);
+  }))
+
+  .add(new Command('distancetogamereal').description('Shows the distance to the game').handler(function(player) {
+    battleroyale.chat.send(player, battleroyale.utils.GetDistanceBetweenPointsXZ(player.position, player.battleroyale.game.position))
+  }))
+
+  .add(new Command('distantetogame').description('Shows the distance to the game based on the circle render formula').handler(function(player) {
+    console.log(battleroyale.utils.GetDistanceBetweenPointsXZ(player.position, player.battleroyale.game.position))
+    console.log(player.battleroyale.game.radius * 0.95/2);
+  }))
+
+  .add(new Command('updatearea').description('updates the current area of the battle').handler(function(player) {
+    jcmp.events.Call('battleroyale_update_area', player.battleroyale.game);
+  }))
+
+
+  .add(new Command('showtimestart').description('shows the time to start in milisenconds').handler(function(player) {
+    console.log(battleroyale.game.timeToStart);
+  }))
+
+
+  .add(new Command('playersonlobby').description('Shows the array players onlobby to the console').handler(function(player) {
+    console.log(battleroyale.game.players.onlobby);
+  }))
+
+  .add(new Command('pareanowarn').description('Check the players in area with no warning').handler(function(player) {
+
+    
+    console.log(player.battleroyale.game.players.filter(function(p) {
+      var comparation = (p.battleroyale.warning == false);
+      return comparation;
+    }));
   }))
 
   .add(new Command('timertype').description('testing the workaround2').handler(function(player) {
@@ -44,6 +77,10 @@ module.exports = ({ Command, manager }) => {
 
     battleroyale.workarounds2.deleteTimer(player, timer);
 
+  }))
+
+  .add(new Command('createBarrel').description('Create a barrel texture').handler(function(player) {
+    jcmp.events.CallRemote('battleroyale_render_barrels', player, JSON.stringify([{position: { x: player.position.x, y: player.position.y, z: player.position.z }}]));
   }))
 
   .add(new Command('setx').parameter('z','number','Z axis').handler(function(player, x) {
@@ -63,7 +100,13 @@ module.exports = ({ Command, manager }) => {
 
   .add(new Command('setminplayers').parameter('minplayers', 'number', 'minplayers').handler(function(player, minplayers) {
       battleroyale.config.game.minPlayers = minplayers;
+      var needplayers = battleroyale.game.players.onlobby.length - minplayers;
+      jcmp.events.CallRemote('battleroyale_txt_needPlayers', null, needplayers);
       battleroyale.chat.send(player, 'Min players set to ' + battleroyale.config.game.minPlayers);
+  }))
+
+  .add(new Command('gotopos').parameter('x', 'number', 'X axis').parameter('y', 'number', 'X axis').parameter('z', 'number', 'X axis').handler(function(player, x,y,z) {
+    player.position = new Vector3f(x,y,z);
   }))
 
 }

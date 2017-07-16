@@ -3,7 +3,7 @@
     "jcmp_dependencies": [
         "chat",
         "command-manager",
-		"jc3mp-minimap"
+        "jcmp-toast"
     ],
     "license":"MIT",
     "name":"battleroyale",
